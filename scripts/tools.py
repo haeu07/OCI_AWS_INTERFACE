@@ -15,7 +15,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 
 
-# error and message logging
+# error and message logging.
 LOG_TYPE_ERROR = 'ERROR'
 LOG_TYPE_MESSAGE = 'MESSAGE'
 LOG_TYPE_DEBUG = 'DEBUG'
