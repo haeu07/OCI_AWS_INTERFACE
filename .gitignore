@@ -1,0 +1,8 @@
+.idea/
+__pycache__/
+scripts/spark-warehouse
+scripts/database.ini
+log/*
+!log/.gitkeep
+local_data/*
+!local_data/.gitkeep
