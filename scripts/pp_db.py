@@ -10,7 +10,7 @@ import cx_Oracle
 ARRAY_TYPE_BY_NAME      = 1    # only works with postgres not with oracle
 ARRAY_TYPE_BY_NUMBER    = 2
 DB_IDENTIFY_REGEX       = '.*DBO.DSR.*'
-
+LOG_PRINT_ALL = True
 
 def connect( ini_file_name=c.PP_DB_DEFAULT_INI_FILE, ini_file_section=c.PP_DB_DEFAULT_INI_FILE_SECTION, run_id=None ):
     t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = run_id, log_text=f"""parameters ini_file_name: {ini_file_name}  ini_file_section:{ini_file_section}""", traceback_info=sys.exc_info()[2] )
@@ -48,8 +48,8 @@ def connect( ini_file_name=c.PP_DB_DEFAULT_INI_FILE, ini_file_section=c.PP_DB_DE
 
 def connect_if_none( p_con=None, ini_file_name=c.PP_DB_DEFAULT_INI_FILE, ini_file_section=c.PP_DB_DEFAULT_INI_FILE_SECTION, run_id=None ):
     if p_con is None:
-        t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='open new connection',   traceback_info=sys.exc_info()[2], p_log_print = False )
-        con = connect( ini_file_name, ini_file_section )
+        t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='open new connection',   traceback_info=sys.exc_info()[2], p_log_print = LOG_PRINT_ALL )
+        con = connect( ini_file_name, ini_file_section, run_id=run_id)
     else:
         # t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='use existing connection',   traceback_info=sys.exc_info()[2], p_log_print = False )
         con = p_con
@@ -71,7 +71,7 @@ def open_cursor( connection, array_type=ARRAY_TYPE_BY_NAME, run_id=None ):
 
 def execute( cursor, statement, array_type=ARRAY_TYPE_BY_NAME, run_id=None ):
     try:
-        t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='Executing: ' + statement,   traceback_info=sys.exc_info()[2], p_log_print = False )
+        t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='Executing: ' + statement,   traceback_info=sys.exc_info()[2], p_log_print = LOG_PRINT_ALL )
         cursor.execute(statement)
         if array_type == ARRAY_TYPE_BY_NAME and re.match( DB_IDENTIFY_REGEX, cursor.connection.dsn ) is not None:  # this is an oracle DB and we want named fields
             cursor.rowfactory = lambda *args: dict(zip([d[0] for d in cursor.description], args))
@@ -132,9 +132,9 @@ def close( p_con ):
 #               else not closed
 ########################################################################################################################
 
-def close_if_none( p_con_check, p_con ):
+def close_if_none( p_con_check, p_con, run_id=None ):
     if p_con_check is None:
-        t.logger( log_type=t.LOG_TYPE_DEBUG, log_text='close connection',   traceback_info=sys.exc_info()[2], p_log_print = False )
+        t.logger( log_type=t.LOG_TYPE_DEBUG, run_id = run_id, log_text='close connection',   traceback_info=sys.exc_info()[2], p_log_print = LOG_PRINT_ALL )
         p_con.close()
     #else:
     #   t.logger( log_type=t.LOG_TYPE_DEBUG, log_text='dont close connection',   traceback_info=sys.exc_info()[2], p_log_print = False )
