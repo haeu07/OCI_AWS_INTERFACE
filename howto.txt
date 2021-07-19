@@ -1,0 +1,3 @@
+How to clone this repository from github
+
+> git clone https://github.com/haeu07/OCI_AWS_INTERFACE.git
