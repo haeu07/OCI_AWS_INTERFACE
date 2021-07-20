@@ -2,6 +2,26 @@ import constants as c
 import pp_db as db
 import tools as t
 import aws_message_q as q
+import cx_Oracle
+
+
+def quick_test_oracle():
+    params = t.read_ini_file(filename='database.ini', section='dbotdsr2.rzsamgpp_int')
+    or_connect_str = params['host']
+    con = cx_Oracle.connect( params['user'], params['password'], or_connect_str )
+    cur = con.cursor()
+
+    run_sql = f"""select pt.product_type_key, pt.product_type_name
+                  from   dig_product_type pt
+                  where  pt.product_type_key like '1%' """
+    cur.execute(run_sql)
+    all_rows = db.fetchall(cur)
+
+    for one_row in all_rows:
+        print( one_row[0] + " " + one_row[1] )
+
+    return
+
 
 def test_db( p_run_id ):
     t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id=1, log_text=f'first test here' )
@@ -68,4 +88,5 @@ if __name__ == '__main__':
     # test_db( p_run_id = 544 )
     # test_db_oci( p_run_id = 544 )
     # test_msg_q()
-    q.dpm_file_approval( p_digital_report_id=111194 )
+    # q.dpm_file_approval( p_digital_report_id=111194 )
+    quick_test_oracle()

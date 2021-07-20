@@ -1,3 +1,9 @@
-How to clone this repository from github
-
+How to clone this repository from github on Linux
+--------------------------------------------------
 > git clone https://github.com/haeu07/OCI_AWS_INTERFACE.git
+
+
+Update repository:
+------------------
+> cd /ISME/STARS/PreProc/STARS_OCI_AWS/OCI_AWS_INTERFACE
+> git update
