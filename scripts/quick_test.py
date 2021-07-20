@@ -28,7 +28,7 @@ def read_ini_file(filename, section):
 
 
 def quick_test_oracle():
-    params = read_ini_file(filename='database.ini', section='dbotdsr2.rzsamgpp_int')
+    params = read_ini_file(filename='database.ini', section='dbotdsr2.rzsamgpp_int.direct')
     or_connect_str = params['host']
     con = cx_Oracle.connect( params['user'], params['password'], or_connect_str )
     cur = con.cursor()
