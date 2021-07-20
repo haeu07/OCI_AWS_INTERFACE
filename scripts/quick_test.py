@@ -5,9 +5,11 @@ from configparser import ConfigParser
 
 def read_ini_file(filename, section):
     # check if ini file exists
+    print( C.PP_SCRIPTS + '\n' )
     filename = os.path.join( C.PP_SCRIPTS, filename)
+    print( filename + '\n' )
     if not os.path.isfile( filename ):
-        raise Exception( 'File: {0} does not exist'.format(filename) )
+        raise Exception( f'File: {filename} does not exist'.format(filename) )
 
     # read ini file
     parser = ConfigParser()
