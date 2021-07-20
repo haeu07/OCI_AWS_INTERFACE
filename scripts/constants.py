@@ -9,6 +9,7 @@ PP_DB_DEFAULT_INI_FILE_SECTION = 'dbotdsr2.rzsamgpp_int'
 
 PP_ROOT = str(pathlib.Path(__file__).parent.absolute())
 PP_ROOT = PP_ROOT.replace('\OCI_AWS_INTERFACE\scripts','')
+PP_ROOT = PP_ROOT.replace('/OCI_AWS_INTERFACE/scripts','')
 PP_DEFAULT_TIMESTAMP_FMT = 'yyyy-MM-dd HH:mm:ss'
 PP_DEFAULT_TIMESTAMP_FMT_PY = '%Y%m%d %H:%M:%S'
 PP_DEFAULT_DATE_FMT = 'yyyyMMdd'
