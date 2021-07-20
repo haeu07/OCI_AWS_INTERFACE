@@ -1,9 +1,32 @@
-import tools as t
+import os
 import cx_Oracle
+import constants as C
+from configparser import ConfigParser
+
+def read_ini_file(filename, section):
+    # check if ini file exists
+    filename = os.path.join( C.PP_SCRIPTS, filename)
+    if not os.path.isfile( filename ):
+        raise Exception( 'File: {0} does not exist'.format(filename) )
+
+    # read ini file
+    parser = ConfigParser()
+    parser.read( filename )
+
+    # get section, default to postgresql
+    db = {}
+    if parser.has_section(section):
+        params = parser.items(section)
+        for param in params:
+            db[param[0]] = param[1]
+    else:
+        raise Exception('Section: {0} not found in the {1} file'.format(section, filename))
+
+    return db
 
 
 def quick_test_oracle():
-    params = t.read_ini_file(filename='database.ini', section='dbotdsr2.rzsamgpp_int')
+    params = read_ini_file(filename='database.ini', section='dbotdsr2.rzsamgpp_int')
     or_connect_str = params['host']
     con = cx_Oracle.connect( params['user'], params['password'], or_connect_str )
     cur = con.cursor()
