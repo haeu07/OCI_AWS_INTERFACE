@@ -88,5 +88,5 @@ if __name__ == '__main__':
     # test_db( p_run_id = 544 )
     # test_db_oci( p_run_id = 544 )
     # test_msg_q()
-    # q.dpm_file_approval( p_digital_report_id=111194 )
-    quick_test_oracle()
+    q.dpm_file_approval( p_digital_report_id=111194 )
+    # quick_test_oracle()

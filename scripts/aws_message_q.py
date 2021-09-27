@@ -1,11 +1,16 @@
 import json, sys, requests
 import constants as c
 import tools as t
-import pp_db as db
+import pp_db_oracle as db
 
 PP_AWS_MSG_Q_URL     = 'https://xdq824bdac.execute-api.us-east-1.amazonaws.com/prod/pp-aws-message-q'
 PP_AWS_MSG_Q_API_KEY = '27qsecNR7ea0jl7B09GL86YWs7B3419A2i8Hmu64'
 PP_OCI_SOURCE_SYSTEM_KEY = 1
+PP_MSG_Q_STATUS_INI = 1
+PP_MSG_Q_STATUS_RUN = 2
+PP_MSG_Q_STATUS_OK  = 3
+PP_MSG_Q_STATUS_ERR = 4
+
 
 # Message Types
 PP_AWS_MSG_TYPE_DPM_FILE_APPROVE = 1
@@ -22,12 +27,20 @@ def send_to_pp_aws_message_q( p_message_type_key, p_message_body, p_run_id = Non
                   'message_body': p_message_body,
                   'message_status_key': 1
                   }
-    try:
 
+    try:
+        params_json = json.dumps( params_dict )
+    except:
+        t.logger(log_type=t.LOG_TYPE_ERROR, run_id = p_run_id, log_text=f"parameter was not a dict that could be serialized into a json", traceback_info=sys.exc_info()[2])
+        raise Exception( f"parameter was not a dict that could be serialized into a json" )
+
+
+    try:
+        params = t.read_ini_file(filename=c.PP_DB_DEFAULT_INI_FILE, section=c.API_KEY_INI_FILE_SECTION)
         response = requests.post(
             PP_AWS_MSG_Q_URL,
-            data = json.dumps( params_dict ),
-            headers={ 'x-api-key': PP_AWS_MSG_Q_API_KEY }
+            data = params_json,
+            headers={ 'x-api-key': params['x_api_key'] }
         )
     except requests.exceptions.RequestException as e:
         t.logger( log_type=t.LOG_TYPE_ERROR, run_id = p_run_id, log_text='Error sending post to AWS', traceback_info=sys.exc_info()[2] )

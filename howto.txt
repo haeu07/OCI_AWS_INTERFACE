@@ -7,3 +7,8 @@ Update repository:
 ------------------
 > cd /ISME/STARS/PreProc/STARS_OCI_AWS/OCI_AWS_INTERFACE
 > git update
+
+
+Invoke the virtual environment on INT
+------------------------------------------
+> source /ISME/STARS/PreProc/VIRTUAL_ENV/bin/activate
