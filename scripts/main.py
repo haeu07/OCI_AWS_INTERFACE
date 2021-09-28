@@ -1,5 +1,5 @@
 import constants as c
-import pp_db as db
+import pp_db_oracle as db
 import tools as t
 import aws_message_q as q
 import cx_Oracle
