@@ -1,7 +1,7 @@
 import os, sys, traceback, re, builtins, calendar
 from datetime import datetime, timedelta
 import constants as C
-import pp_db as db
+#import pp_db as db
 
 from inspect import currentframe, getframeinfo
 from configparser import ConfigParser
@@ -143,6 +143,8 @@ def days_between_dates(d1, d2):
 
 
 
+"""   this is the only program that uses pp_db.py so disabled here until postgress mudule installed on linux
+
 
 ########################################################################################################################
 # procedure name: send_email
@@ -166,9 +168,9 @@ def send_email( p_to, p_subject, p_body, p_files = None, p_cc=None, p_bcc=None, 
     PORT        = 587
 
     # get the user and pass for the SMTP sending
-    run_sql = f"""select l.aws_access_key_id, l.aws_secret_access_key
+    run_sql = f"" "select l.aws_access_key_id, l.aws_secret_access_key
                   from pp_data_locations l
-                  where l.loc_key = 'EMAIL_SENDING'"""
+                  where l.loc_key = 'EMAIL_SENDING'"" "
     db.execute(cur, run_sql )
     a_row = db.fetchone(cur)
     USERNAME_SMTP = a_row['aws_access_key_id']
@@ -231,3 +233,5 @@ def send_email( p_to, p_subject, p_body, p_files = None, p_cc=None, p_bcc=None, 
     logger( log_type=LOG_TYPE_MESSAGE, run_id = p_run_id, log_text=f"email sent" )
     cur.close()
     db.close_if_none(p_con, con)
+
+"""
