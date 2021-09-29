@@ -3,6 +3,7 @@ import pp_db_oracle as db
 import tools as t
 import aws_message_q as q
 import cx_Oracle
+import requests, json
 
 
 def quick_test_oracle():
@@ -77,16 +78,39 @@ def test_msg_q():
     msg_body = {
         'digital_report_id': 12345,     # the message body posted as a json
         'user_activity': 'approve',
-        'approval_timestamp': '2021-07-14 10:10:10'
+        'approval_timestamp': '20210714 10:10:10'
     }
 
     q.send_to_pp_aws_message_q( p_run_id = 1, p_message_type_key = q.PP_AWS_MSG_TYPE_DPM_FILE_APPROVE, p_message_body = msg_body )
     return
 
 
+def test_api():
+    PP_AWS_MSG_Q_URL     = 'https://xdq824bdac.execute-api.us-east-1.amazonaws.com/prod/pp-aws-message-q'
+    PP_AWS_MSG_Q_API_KEY = '27qsecNR7ea0jl7B09GL86YWs7B3419A2i8Hmu64'
+
+    body = { 'source_system_key': 1,       # indicates source system where this message came from (1 = PreProc on OCI)
+             'message_type_key': 1,        # what type of message is this (1 = DPM user file activity, 2 = ... )
+             'message_body': {
+                 'digital_report_id': 12345,     # the message body posted as a json
+                 'user_activity': 'approve',
+                 'approval_timestamp': '20210714 10:10:10' },
+             'message_status_key': 1 }
+
+    response = requests.post(
+        PP_AWS_MSG_Q_URL,
+        data = json.dumps( body ),
+        headers={ 'x-api-key': PP_AWS_MSG_Q_API_KEY }
+    )
+
+    print( response.json() )
+
+
 if __name__ == '__main__':
+    #q.dpm_file_approval( p_digital_report_id=111194 )
+
     # test_db( p_run_id = 544 )
     # test_db_oci( p_run_id = 544 )
     # test_msg_q()
-    q.dpm_file_approval( p_digital_report_id=111194 )
+    test_api()
     # quick_test_oracle()
