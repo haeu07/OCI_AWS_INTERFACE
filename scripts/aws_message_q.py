@@ -30,7 +30,9 @@ def send_to_pp_aws_message_q( p_message_type_key, p_message_body, p_run_id = Non
 
     try:
         params_json = json.dumps( params_dict )
+        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_run_id, log_text=f'complete json for the API call:: {params_json} ' )
     except:
+        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_run_id, log_text=f'complete json for the API call:: {params_json} ' )
         t.logger(log_type=t.LOG_TYPE_ERROR, run_id = p_run_id, log_text=f"parameter was not a dict that could be serialized into a json", traceback_info=sys.exc_info()[2])
         raise Exception( f"parameter was not a dict that could be serialized into a json" )
 
@@ -51,7 +53,7 @@ def send_to_pp_aws_message_q( p_message_type_key, p_message_body, p_run_id = Non
 
 
 
-def dpm_file_approval( p_digital_report_id ):
+def dpm_file_activity( p_digital_report_id, p_activity ):
     t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'start with digital_report_id: {p_digital_report_id} ' )
 
     con = db.connect( run_id=p_digital_report_id, ini_file_section=c.PP_DB_DEFAULT_INI_FILE_SECTION )
@@ -63,11 +65,19 @@ def dpm_file_approval( p_digital_report_id ):
     db.execute(cur, run_sql, run_id=p_digital_report_id)
     a_row = db.fetchone(cur)
 
-    msg_body = {
-        'digital_report_id': p_digital_report_id,
-        'approval_timestamp': a_row['WHEN_APPROVED'].strftime( c.PP_DEFAULT_TIMESTAMP_FMT_PY )
-    }
+    if p_activity.lower()  in ['approve', 'reject', 'delete']:
+        msg_body = {
+            'digital_report_id': p_digital_report_id,
+            'activity': p_activity,
+            'approval_timestamp': a_row['WHEN_APPROVED'].strftime( c.PP_DEFAULT_TIMESTAMP_FMT_PY )
+        }
 
-    message_no = send_to_pp_aws_message_q( p_message_type_key=PP_AWS_MSG_TYPE_DPM_FILE_APPROVE, p_message_body=msg_body, p_run_id = p_digital_report_id )
-    t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'done - new message_no: {message_no} ' )
+        message_no = send_to_pp_aws_message_q( p_message_type_key=PP_AWS_MSG_TYPE_DPM_FILE_APPROVE, p_message_body=msg_body, p_run_id = p_digital_report_id )
+        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'done - new message_no: {message_no} ' )
+    else:
+        message_no = -1
+        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'invalid activity: {p_activity} so return -1' )
+
+    db.close_cursor( cur )
+    db.close( con )
     return message_no

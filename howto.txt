@@ -6,7 +6,9 @@ How to clone this repository from github on Linux
 Update repository:
 ------------------
 > cd /ISME/STARS/PreProc/STARS_OCI_AWS/OCI_AWS_INTERFACE
-> git update
+> git pull   # get latest verion of repo
+> git push   # write back changes to repo
+
 
 
 Invoke the virtual environment on INT
