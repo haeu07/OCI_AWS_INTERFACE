@@ -10,7 +10,20 @@ Update repository:
 > git push   # write back changes to repo
 
 
-
 Invoke the virtual environment on INT
 ------------------------------------------
 > source /ISME/STARS/PreProc/VIRTUAL_ENV/bin/activate
+
+
+Central call that already invokes the venv
+------------------------------------------
+# eg. call approve
+> sh scripts/call_main.sh approve
+# eg. call reject
+> sh scripts/call_main.sh reject
+
+!!! I had a problem executing this because python module "requests" was buggy - I did
+> pip install requests=2.25.0
+and then again
+> pip install requests=2.26.0
+then it worked

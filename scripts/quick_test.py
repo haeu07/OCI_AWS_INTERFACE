@@ -1,4 +1,4 @@
-import os
+import os, json, requests
 import cx_Oracle
 import pp_db_oracle as db
 import tools as t
@@ -143,7 +143,7 @@ def test_api():
 if __name__ == '__main__':
     # test_db( p_run_id = 544 )
     # test_db_oci( p_run_id = 544 )
-    # test_msg_q()
+    test_msg_q()
     # test_api()
     # quick_test_oracle()
 
