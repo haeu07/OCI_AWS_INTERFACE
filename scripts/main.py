@@ -97,10 +97,12 @@ def test_api():
                  'approval_timestamp': '20210714 10:10:10' },
              'message_status_key': 1 }
 
-    header = { 'x-api-key': PP_AWS_MSG_Q_API_KEY }
+    header = { 'x-api-key': PP_AWS_MSG_Q_API_KEY,
+               'Content-Type': 'application/json' }
 
     print( header )
     print( body )
+    print( json.dumps( body ) )
 
     response = requests.post(
         PP_AWS_MSG_Q_URL,
