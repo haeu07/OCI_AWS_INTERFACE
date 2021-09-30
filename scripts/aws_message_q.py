@@ -4,7 +4,6 @@ import tools as t
 import pp_db_oracle as db
 
 PP_AWS_MSG_Q_URL     = 'https://xdq824bdac.execute-api.us-east-1.amazonaws.com/prod/pp-aws-message-q'
-PP_AWS_MSG_Q_API_KEY = '27qsecNR7ea0jl7B09GL86YWs7B3419A2i8Hmu64'
 PP_OCI_SOURCE_SYSTEM_KEY = 1
 PP_MSG_Q_STATUS_INI = 1
 PP_MSG_Q_STATUS_RUN = 2
