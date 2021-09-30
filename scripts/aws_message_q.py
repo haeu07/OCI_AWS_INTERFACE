@@ -53,7 +53,16 @@ def send_to_pp_aws_message_q( p_message_type_key, p_message_body, p_run_id = Non
 
 
 
-def dpm_file_activity( p_digital_report_id, p_activity ):
+########################################################################################################################
+# procedure:    dpm_activity
+# parameters:   p_digital_report_id         DPM digital report id
+#               p_status                    activity selected in DPM. Allowed values ['approve', 'reject', 'delete', 'refresh_ctl_report']
+#               p_action                    option or the activity in DPM. Allowed values ['no_action', 'reload', 'skip_gras_match', 'none']
+# description:  create the message about a DPM activity (approve/reject/delete) that is sent to AWS message queue so
+#               that it can be executed there
+########################################################################################################################
+
+def dpm_activity( p_digital_report_id, p_status, p_action ):
     t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'start with digital_report_id: {p_digital_report_id} ' )
 
     con = db.connect( run_id=p_digital_report_id, ini_file_section=c.PP_DB_DEFAULT_INI_FILE_SECTION )
@@ -65,18 +74,27 @@ def dpm_file_activity( p_digital_report_id, p_activity ):
     db.execute(cur, run_sql, run_id=p_digital_report_id)
     a_row = db.fetchone(cur)
 
-    if p_activity.lower()  in ['approve', 'reject', 'delete']:
-        msg_body = {
-            'digital_report_id': p_digital_report_id,
-            'activity': p_activity,
-            'approval_timestamp': a_row['WHEN_APPROVED'].strftime( c.PP_DEFAULT_TIMESTAMP_FMT_PY )
-        }
+    if a_row:
+        if p_status.lower()  in ['approve', 'reject', 'delete', 'refresh_ctl_report']:
+            if p_action.lower()  in ['no_action', 'reload', 'skip_gras_match', 'none']:
+                msg_body = {
+                    'digital_report_id': p_digital_report_id,
+                    'status': p_status,
+                    'action': p_action,
+                    'approval_timestamp': a_row['WHEN_APPROVED'].strftime( c.PP_DEFAULT_TIMESTAMP_FMT_PY )
+                }
 
-        message_no = send_to_pp_aws_message_q( p_message_type_key=PP_AWS_MSG_TYPE_DPM_FILE_APPROVE, p_message_body=msg_body, p_run_id = p_digital_report_id )
-        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'done - new message_no: {message_no} ' )
+                message_no = send_to_pp_aws_message_q( p_message_type_key=PP_AWS_MSG_TYPE_DPM_FILE_APPROVE, p_message_body=msg_body, p_run_id = p_digital_report_id )
+                t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'done - new message_no: {message_no} ' )
+            else:
+                message_no = -1
+                t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'invalid action: {p_action} so return -1' )
+        else:
+            message_no = -1
+            t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'invalid status: {p_status} so return -1' )
     else:
         message_no = -1
-        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'invalid activity: {p_activity} so return -1' )
+        t.logger( log_type=t.LOG_TYPE_MESSAGE, run_id = p_digital_report_id, log_text=f'no DPM record found for digital_report_id: {p_digital_report_id} so return -1' )
 
     db.close_cursor( cur )
     db.close( con )
