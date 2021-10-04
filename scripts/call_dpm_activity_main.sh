@@ -13,7 +13,7 @@ echo "Call parameter:" $1
 
 #python3 main.py approve
 #python3 main.py reject
-python3 dpm_activity_main.py $1 $2 $3
+python3 $GPP_PATH/STARS_OCI_AWS/OCI_AWS_INTERFACE/scripts/dpm_activity_main.py $1 $2 $3
 
 exit 0
 
