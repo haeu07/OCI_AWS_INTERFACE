@@ -24,7 +24,7 @@ def send_to_pp_aws_message_q( p_message_type_key, p_message_body, p_run_id = Non
     params_dict={ 'source_system_key': PP_OCI_SOURCE_SYSTEM_KEY,       # indicates source system where this message came from (1 = PreProc on OCI)
                   'message_type_key': p_message_type_key,        # what type of message is this (1 = DPM user file activity, 2 = ... )
                   'message_body': p_message_body,
-                  'message_status_key': 1
+                  'message_status_key': PP_MSG_Q_STATUS_INI
                   }
 
     try:
