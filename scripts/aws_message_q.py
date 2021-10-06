@@ -5,10 +5,10 @@ import pp_db_oracle as db
 
 PP_AWS_MSG_Q_URL     = 'https://xdq824bdac.execute-api.us-east-1.amazonaws.com/prod/pp-aws-message-q'
 PP_OCI_SOURCE_SYSTEM_KEY = 1
-PP_MSG_Q_STATUS_INI = 1
-PP_MSG_Q_STATUS_RUN = 2
-PP_MSG_Q_STATUS_OK  = 3
-PP_MSG_Q_STATUS_ERR = 4
+PP_MSG_Q_STATUS_INI = 10
+PP_MSG_Q_STATUS_RUN = 20
+PP_MSG_Q_STATUS_OK  = 30
+PP_MSG_Q_STATUS_ERR = 40
 
 
 # Message Types
