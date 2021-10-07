@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "Activating virtual Enviroment!"
 
 export https_proxy=https://10.11.120.229:3128/
