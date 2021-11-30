@@ -3,7 +3,7 @@ import constants as c
 import tools as t
 import pp_db_oracle as db
 
-PP_AWS_MSG_Q_URL     = 'https://xdq824bdac.execute-api.us-east-1.amazonaws.com/prod/pp-aws-message-q'
+PP_AWS_MSG_Q_URL     = 'https://api-stars-dev.scuba.tools/pp-aws-message-q'
 PP_OCI_SOURCE_SYSTEM_KEY = 1
 PP_MSG_Q_STATUS_INI = 10
 PP_MSG_Q_STATUS_RUN = 20
@@ -75,7 +75,7 @@ def dpm_activity( p_digital_report_id, p_status, p_action ):
 
     if a_row:
         if p_status.lower()  in ['approve', 'reject', 'delete', 'refresh_ctl_report']:
-            if p_action.lower()  in ['no_action', 'reload', 'skip_gras_match', 'none']:
+            if p_action.lower()  in ['no_action', 'reload', 'request_new_file','skip_gras_match', 'none']:
                 msg_body = {
                     'digital_report_id': p_digital_report_id,
                     'status': p_status,
