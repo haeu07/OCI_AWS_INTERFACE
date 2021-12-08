@@ -3,7 +3,7 @@ import constants as c
 import tools as t
 import pp_db_oracle as db
 
-PP_AWS_MSG_Q_URL     = 'https://api-stars-dev.scuba.tools/pp-aws-message-q'
+PP_AWS_MSG_Q_URL     = 'https://starsd-api.scuba.tools/v1/aws/pp-aws-message-q'
 PP_OCI_SOURCE_SYSTEM_KEY = 1
 PP_MSG_Q_STATUS_INI = 10
 PP_MSG_Q_STATUS_RUN = 20

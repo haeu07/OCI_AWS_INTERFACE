@@ -3,7 +3,7 @@ import sys
 from sys import platform
 import pathlib
 
-PP_SCHEMA = 'preproc'
+PP_SCHEMA = 'stars_workflow'
 PP_DB_DEFAULT_INI_FILE = 'database.ini'
 API_KEY_INI_FILE_SECTION = 'stars-api-message-q'
 
